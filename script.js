@@ -3,6 +3,35 @@
   'use strict';
 
   /* ----------------------------------------------------------
+     Hero rotating doctor (crossfade every 5s)
+     ---------------------------------------------------------- */
+  const heroImgs = document.querySelectorAll('.hero-visual .hero-img');
+  const heroBadge = document.getElementById('heroBadge');
+  const heroBadgeAvatar = document.getElementById('heroBadgeAvatar');
+  const heroBadgeName = document.getElementById('heroBadgeName');
+  const heroBadgeRole = document.getElementById('heroBadgeRole');
+  const heroDoctors = [
+    { key: 'daniela',  initial: 'D', name: 'Dra. Daniela Gavilán',     role: 'Implantología Bucomaxilofacial' },
+    { key: 'mariapaz', initial: 'M', name: 'Dra. María Paz Villegas',  role: 'Odontopediatría' }
+  ];
+  if (heroImgs.length && heroBadge) {
+    let i = 0;
+    const rotate = () => {
+      i = (i + 1) % heroDoctors.length;
+      const next = heroDoctors[i];
+      heroImgs.forEach(img => img.classList.toggle('is-active', img.dataset.doctor === next.key));
+      heroBadge.classList.add('is-fading');
+      setTimeout(() => {
+        heroBadgeAvatar.textContent = next.initial;
+        heroBadgeName.textContent   = next.name;
+        heroBadgeRole.textContent   = next.role;
+        heroBadge.classList.remove('is-fading');
+      }, 400);
+    };
+    setInterval(rotate, 5000);
+  }
+
+  /* ----------------------------------------------------------
      Nav scroll state
      ---------------------------------------------------------- */
   const nav = document.getElementById('nav');
