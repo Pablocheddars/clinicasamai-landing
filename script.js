@@ -1,6 +1,10 @@
 /* Clínica Samai — interactions */
 (function () {
   'use strict';
+
+  /* ----------------------------------------------------------
+     Nav scroll state
+     ---------------------------------------------------------- */
   const nav = document.getElementById('nav');
   const onScroll = () => {
     if (window.scrollY > 12) nav.classList.add('is-scrolled');
@@ -8,6 +12,10 @@
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  /* ----------------------------------------------------------
+     Mobile menu
+     ---------------------------------------------------------- */
   const burger = document.getElementById('burger');
   const menu = document.getElementById('menu');
   const closeMenu = () => {
@@ -24,14 +32,20 @@
     document.body.style.overflow = open ? 'hidden' : '';
   });
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ----------------------------------------------------------
+     Service tabs
+     ---------------------------------------------------------- */
   const tabs = document.querySelectorAll('.serv-tab');
   const panels = document.querySelectorAll('.serv-panel');
   const pill = document.getElementById('servPill');
+
   const positionPill = (tab) => {
     if (!tab || !pill) return;
     pill.style.width = tab.offsetWidth + 'px';
     pill.style.transform = `translateX(${tab.offsetLeft - 5}px)`;
   };
+
   const activateTab = (name) => {
     tabs.forEach(t => {
       const active = t.dataset.tab === name;
@@ -41,7 +55,10 @@
     });
     panels.forEach(p => p.classList.toggle('is-active', p.dataset.panel === name));
   };
+
   tabs.forEach(t => t.addEventListener('click', () => activateTab(t.dataset.tab)));
+
+  // initial pill position (wait for fonts to settle)
   const initialActive = document.querySelector('.serv-tab.is-active');
   requestAnimationFrame(() => positionPill(initialActive));
   window.addEventListener('resize', () => {
@@ -51,6 +68,10 @@
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => positionPill(document.querySelector('.serv-tab.is-active')));
   }
+
+  /* ----------------------------------------------------------
+     Reveal-on-scroll
+     ---------------------------------------------------------- */
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -64,6 +85,10 @@
   } else {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
   }
+
+  /* ----------------------------------------------------------
+     Smooth-scroll offset for sticky nav
+     ---------------------------------------------------------- */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
@@ -75,4 +100,5 @@
       window.scrollTo({ top: y, behavior: 'smooth' });
     });
   });
+
 })();
